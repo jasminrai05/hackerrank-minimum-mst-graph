@@ -1,0 +1,39 @@
+#!/bin/python3
+
+import sys
+
+g = int(input().strip())
+
+for _ in range(g):
+    n, m, s = map(int, input().split())
+
+    core = (n - 1) * (n - 2) // 2
+
+    if m <= core + 1:
+        answer = m + s - n + 1
+    else:
+        # Case 1: unbalanced distribution
+        unbalanced = core + (s - n + 2) * (m - core)
+
+        # Case 2: balanced distribution
+        base = s // (n - 1)
+        larger = s - base * (n - 1)
+        smaller = n - 1 - larger
+
+        midbalanced = (
+            base * core
+            + (base + larger) * (m - core)
+        )
+
+        if larger > 0:
+            balanced_core = smaller * (smaller + 1) // 2
+            balanced = (
+                base * balanced_core
+                + (base + 1) * (m - balanced_core)
+            )
+        else:
+            balanced = base * m
+
+        answer = min(unbalanced, midbalanced, balanced)
+
+    print(answer)
